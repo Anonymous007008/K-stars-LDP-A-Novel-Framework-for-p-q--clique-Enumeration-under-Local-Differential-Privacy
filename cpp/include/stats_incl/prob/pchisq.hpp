@@ -19,19 +19,19 @@
   ################################################################################*/
 
 /*
- * cdf of the Bernoulli distribution
+ * cdf of the chi-squared distribution
  */
 
-#ifndef _statslib_pbern_HPP
-#define _statslib_pbern_HPP
+#ifndef _statslib_pchisq_HPP
+#define _statslib_pchisq_HPP
 
 //
 // single input
 
-template<typename T>
+template<typename T1, typename T2>
 statslib_constexpr
-return_t<T>
-pbern(const llint_t x, const T prob_par, const bool log_form = false) noexcept;
+common_return_t<T1,T2>
+pchisq(const T1 x, const T2 dof_par, const bool log_form = false) noexcept;
 
 //
 // vector/matrix input
@@ -40,38 +40,38 @@ pbern(const llint_t x, const T prob_par, const bool log_form = false) noexcept;
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>>
 statslib_inline
 std::vector<rT>
-pbern(const std::vector<eT>& x, const T1 prob_par, const bool log_form = false);
+pchisq(const std::vector<eT>& x, const T1 dof_par, const bool log_form = false);
 #endif
 
 #ifdef STATS_ENABLE_ARMA_WRAPPERS
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>>
 statslib_inline
 ArmaMat<rT>
-pbern(const ArmaMat<eT>& X, const T1 prob_par, const bool log_form = false);
+pchisq(const ArmaMat<eT>& X, const T1 dof_par, const bool log_form = false);
 
 template<typename mT, typename tT, typename T1>
 statslib_inline
 mT 
-pbern(const ArmaGen<mT,tT>& X, const T1 prob_par, const bool log_form = false);
+pchisq(const ArmaGen<mT,tT>& X, const T1 dof_par, const bool log_form = false);
 #endif
 
 #ifdef STATS_ENABLE_BLAZE_WRAPPERS
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>, bool To = blaze::columnMajor>
 statslib_inline
 BlazeMat<rT,To>
-pbern(const BlazeMat<eT,To>& X, const T1 prob_par, const bool log_form = false);
+pchisq(const BlazeMat<eT,To>& X, const T1 dof_par, const bool log_form = false);
 #endif
 
 #ifdef STATS_ENABLE_EIGEN_WRAPPERS
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>, int iTr = Eigen::Dynamic, int iTc = Eigen::Dynamic>
 statslib_inline
 EigenMat<rT,iTr,iTc>
-pbern(const EigenMat<eT,iTr,iTc>& X, const T1 prob_par, const bool log_form = false);
+pchisq(const EigenMat<eT,iTr,iTc>& X, const T1 dof_par, const bool log_form = false);
 #endif
 
 //
 // include implementation files
 
-#include "pbern.ipp"
+#include "pchisq.ipp"
 
 #endif

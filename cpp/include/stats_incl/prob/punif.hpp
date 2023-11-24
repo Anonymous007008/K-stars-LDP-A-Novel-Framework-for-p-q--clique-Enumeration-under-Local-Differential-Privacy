@@ -19,59 +19,59 @@
   ################################################################################*/
 
 /*
- * cdf of the Bernoulli distribution
+ * cdf of the uniform distribution
  */
 
-#ifndef _statslib_pbern_HPP
-#define _statslib_pbern_HPP
+#ifndef _statslib_punif_HPP
+#define _statslib_punif_HPP
 
 //
 // single input
 
-template<typename T>
+template<typename T1, typename T2, typename T3>
 statslib_constexpr
-return_t<T>
-pbern(const llint_t x, const T prob_par, const bool log_form = false) noexcept;
+common_return_t<T1,T2,T3>
+punif(const T1 x, const T2 a_par, const T3 b_par, const bool log_form = false) noexcept;
 
 //
 // vector/matrix input
 
 #ifdef STATS_ENABLE_STDVEC_WRAPPERS
-template<typename eT, typename T1, typename rT = common_return_t<eT,T1>>
+template<typename eT, typename T1, typename T2, typename rT = common_return_t<eT,T1,T2>>
 statslib_inline
 std::vector<rT>
-pbern(const std::vector<eT>& x, const T1 prob_par, const bool log_form = false);
+punif(const std::vector<eT>& x, const T1 a_par, const T2 b_par, const bool log_form = false);
 #endif
 
 #ifdef STATS_ENABLE_ARMA_WRAPPERS
-template<typename eT, typename T1, typename rT = common_return_t<eT,T1>>
+template<typename eT, typename T1, typename T2, typename rT = common_return_t<eT,T1,T2>>
 statslib_inline
 ArmaMat<rT>
-pbern(const ArmaMat<eT>& X, const T1 prob_par, const bool log_form = false);
+punif(const ArmaMat<eT>& X, const T1 a_par, const T2 b_par, const bool log_form = false);
 
-template<typename mT, typename tT, typename T1>
+template<typename mT, typename tT, typename T1, typename T2>
 statslib_inline
-mT 
-pbern(const ArmaGen<mT,tT>& X, const T1 prob_par, const bool log_form = false);
+mT
+punif(const ArmaGen<mT,tT>& X, const T1 a_par, const T2 b_par, const bool log_form = false);
 #endif
 
 #ifdef STATS_ENABLE_BLAZE_WRAPPERS
-template<typename eT, typename T1, typename rT = common_return_t<eT,T1>, bool To = blaze::columnMajor>
+template<typename eT, typename T1, typename T2, typename rT = common_return_t<eT,T1,T2>, bool To = blaze::columnMajor>
 statslib_inline
 BlazeMat<rT,To>
-pbern(const BlazeMat<eT,To>& X, const T1 prob_par, const bool log_form = false);
+punif(const BlazeMat<eT,To>& X, const T1 a_par, const T2 b_par, const bool log_form = false);
 #endif
 
 #ifdef STATS_ENABLE_EIGEN_WRAPPERS
-template<typename eT, typename T1, typename rT = common_return_t<eT,T1>, int iTr = Eigen::Dynamic, int iTc = Eigen::Dynamic>
+template<typename eT, typename T1, typename T2, typename rT = common_return_t<eT,T1,T2>, int iTr = Eigen::Dynamic, int iTc = Eigen::Dynamic>
 statslib_inline
 EigenMat<rT,iTr,iTc>
-pbern(const EigenMat<eT,iTr,iTc>& X, const T1 prob_par, const bool log_form = false);
+punif(const EigenMat<eT,iTr,iTc>& X, const T1 a_par, const T2 b_par, const bool log_form = false);
 #endif
 
 //
 // include implementation files
 
-#include "pbern.ipp"
+#include "punif.ipp"
 
 #endif
