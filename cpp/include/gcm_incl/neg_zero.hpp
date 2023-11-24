@@ -18,28 +18,20 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
-
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+/*
+ * extract signbit for signed zeros
  */
 
+namespace internal
+{
+
 template<typename T>
-constexpr
-T
-abs(const T x)
+constexpr 
+bool 
+neg_zero(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+    return( (x == T(0.0)) && (copysign(T(1.0), x) == T(-1.0)) );
 }
 
-#endif
+}

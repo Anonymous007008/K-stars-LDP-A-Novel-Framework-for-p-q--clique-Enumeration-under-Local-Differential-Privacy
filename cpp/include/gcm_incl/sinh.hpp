@@ -18,28 +18,48 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
-
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+/*
+ * compile-time hyperbolic sine function
  */
+
+#ifndef _gcem_sinh_HPP
+#define _gcem_sinh_HPP
+
+namespace internal
+{
 
 template<typename T>
 constexpr
 T
-abs(const T x)
+sinh_check(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
+    return( // NaN check
+            is_nan(x) ? \
+                GCLIM<T>::quiet_NaN() :
+            // indistinguishable from zero
+            GCLIM<T>::min() > abs(x) ? \
                 T(0) :
             // else
-            x < T(0) ? \
-                - x : x );
+                (exp(x) - exp(-x))/T(2) );
+}
+
+}
+
+/**
+ * Compile-time hyperbolic sine function
+ *
+ * @param x a real-valued input.
+ * @return the hyperbolic sine function using \f[ \sinh(x) = \frac{\exp(x) - \exp(-x)}{2} \f]
+ */
+
+template<typename T>
+constexpr
+return_t<T>
+sinh(const T x)
+noexcept
+{
+    return internal::sinh_check( static_cast<return_t<T>>(x) );
 }
 
 #endif

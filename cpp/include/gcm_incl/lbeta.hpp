@@ -18,28 +18,25 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+#ifndef _gcem_lbeta_HPP
+#define _gcem_lbeta_HPP
 
 /**
- * Compile-time absolute value function
+ * Compile-time log-beta function
  *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+ * @param a a real-valued input.
+ * @param b a real-valued input.
+ * @return the log-beta function using \f[ \ln \text{B}(\alpha,\beta) := \ln \int_0^1 t^{\alpha - 1} (1-t)^{\beta - 1} dt = \ln \Gamma(\alpha) + \ln \Gamma(\beta) - \ln \Gamma(\alpha + \beta) \f]
+ * where \f$ \Gamma \f$ denotes the gamma function.
  */
 
-template<typename T>
+template<typename T1, typename T2>
 constexpr
-T
-abs(const T x)
+common_return_t<T1,T2>
+lbeta(const T1 a, const T2 b)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+    return( (lgamma(a) + lgamma(b)) - lgamma(a+b) );
 }
 
 #endif

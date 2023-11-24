@@ -18,28 +18,56 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+#ifndef _gcem_round_HPP
+#define _gcem_round_HPP
 
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
- */
+namespace internal
+{
 
 template<typename T>
 constexpr
 T
-abs(const T x)
+round_int(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
+    return static_cast<T>(find_whole(x));
+}
+
+template<typename T>
+constexpr
+T
+round_check(const T x)
+noexcept
+{
+    return( // NaN check
+            is_nan(x) ? \
+                GCLIM<T>::quiet_NaN() :
+            // +/- infinite
+            !is_finite(x) ? \
+                x :
+            // signed-zero cases
+            GCLIM<T>::min() > abs(x) ? \
+                x :
             // else
-            x < T(0) ? \
-                - x : x );
+                sgn(x) * round_int(abs(x)) );
+}
+
+}
+
+/**
+ * Compile-time round function
+ *
+ * @param x a real-valued input.
+ * @return computes the rounding value of the input.
+ */
+
+template<typename T>
+constexpr
+return_t<T>
+round(const T x)
+noexcept
+{
+    return internal::round_check( static_cast<return_t<T>>(x) );
 }
 
 #endif

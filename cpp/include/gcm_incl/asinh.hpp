@@ -18,28 +18,49 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
-
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+/*
+ * compile-time inverse hyperbolic sine function
  */
+
+#ifndef _gcem_asinh_HPP
+#define _gcem_asinh_HPP
+
+namespace internal
+{
 
 template<typename T>
 constexpr
 T
-abs(const T x)
+asinh_compute(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
+    return( // NaN check
+            is_nan(x) ? \
+                GCLIM<T>::quiet_NaN() :
+            // indistinguishable from zero
+            GCLIM<T>::min() > abs(x) ? \
                 T(0) :
             // else
-            x < T(0) ? \
-                - x : x );
+                log( x + sqrt(x*x + T(1)) ) );
 }
+
+}
+
+/**
+ * Compile-time inverse hyperbolic sine function
+ *
+ * @param x a real-valued input.
+ * @return the inverse hyperbolic sine function using \f[ \text{asinh}(x) = \ln \left( x + \sqrt{x^2 + 1} \right) \f]
+ */
+
+template<typename T>
+constexpr
+return_t<T>
+asinh(const T x)
+noexcept
+{
+    return internal::asinh_compute( static_cast<return_t<T>>(x) );
+}
+
 
 #endif

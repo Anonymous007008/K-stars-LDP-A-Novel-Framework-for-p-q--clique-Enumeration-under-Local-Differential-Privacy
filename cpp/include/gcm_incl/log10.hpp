@@ -18,28 +18,42 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+/*
+ * compile-time common logarithm function
+ */
+
+#ifndef _gcem_log10_HPP
+#define _gcem_log10_HPP
+
+namespace internal
+{
+
+template<typename T>
+constexpr
+return_t<T>
+log10_check(const T x)
+noexcept
+{
+    // log_10(x) = ln(x) / ln(10)
+    return return_t<T>(log(x) / GCEM_LOG_10);
+}
+
+}
 
 /**
- * Compile-time absolute value function
+ * Compile-time common logarithm function
  *
  * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+ * @return \f$ \log_{10}(x) \f$ using \f[ \log_{10}(x) = \frac{\log_e(x)}{\log_e(10)} \f] 
  */
 
 template<typename T>
 constexpr
-T
-abs(const T x)
+return_t<T>
+log10(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+    return internal::log10_check( x );
 }
 
 #endif

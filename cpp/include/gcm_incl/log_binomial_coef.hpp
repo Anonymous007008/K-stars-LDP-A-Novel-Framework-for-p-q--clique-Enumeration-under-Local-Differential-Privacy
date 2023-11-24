@@ -18,28 +18,48 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+#ifndef _gcem_log_binomial_coef_HPP
+#define _gcem_log_binomial_coef_HPP
 
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
- */
+namespace internal
+{
 
 template<typename T>
 constexpr
 T
-abs(const T x)
+log_binomial_coef_compute(const T n, const T k)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+    return( lgamma(n+1) - (lgamma(k+1) + lgamma(n-k+1)) );
+}
+
+template<typename T1, typename T2, typename TC = common_return_t<T1,T2>>
+constexpr
+TC
+log_binomial_coef_type_check(const T1 n, const T2 k)
+noexcept
+{
+    return log_binomial_coef_compute(static_cast<TC>(n),static_cast<TC>(k));
+}
+
+}
+
+/**
+ * Compile-time log binomial coefficient
+ *
+ * @param n integral-valued input.
+ * @param k integral-valued input.
+ * @return computes the log Binomial coefficient
+ * \f[ \ln \frac{n!}{k!(n-k)!} = \ln \Gamma(n+1) - [ \ln \Gamma(k+1) + \ln \Gamma(n-k+1) ] \f]
+ */
+
+template<typename T1, typename T2>
+constexpr
+common_return_t<T1,T2>
+log_binomial_coef(const T1 n, const T2 k)
+noexcept
+{
+    return internal::log_binomial_coef_type_check(n,k);
 }
 
 #endif

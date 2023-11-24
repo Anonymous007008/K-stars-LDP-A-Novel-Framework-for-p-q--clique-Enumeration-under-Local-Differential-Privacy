@@ -18,28 +18,29 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
-
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+/*
+ * find the whole number part of x = n + r, where -0.5 <= r <= 0.5
  */
+
+#ifndef _gcem_find_whole_HPP
+#define _gcem_find_whole_HPP
+
+namespace internal
+{
 
 template<typename T>
 constexpr
-T
-abs(const T x)
+llint_t
+find_whole(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+    return( abs(x - internal::floor_check(x)) >= T(0.5) ? \
+            // if 
+                static_cast<llint_t>(internal::floor_check(x) + sgn(x)) :
+            // else 
+                static_cast<llint_t>(internal::floor_check(x)) );
+}
+
 }
 
 #endif

@@ -18,28 +18,65 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+#ifndef _gcem_ceil_HPP
+#define _gcem_ceil_HPP
 
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
- */
+namespace internal
+{
+
+template<typename T>
+constexpr
+int
+ceil_resid(const T x, const T x_whole)
+noexcept
+{
+    return( (x > T(0)) && (x > x_whole) );
+}
 
 template<typename T>
 constexpr
 T
-abs(const T x)
+ceil_int(const T x, const T x_whole)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
+    return( x_whole + static_cast<T>(ceil_resid(x,x_whole)) );
+}
+
+template<typename T>
+constexpr
+T
+ceil_check(const T x)
+noexcept
+{
+    return( // NaN check
+            is_nan(x) ? \
+                GCLIM<T>::quiet_NaN() :
+            // +/- infinite
+            !is_finite(x) ? \
+                x :
+            // signed-zero cases
+            GCLIM<T>::min() > abs(x) ? \
+                x :
             // else
-            x < T(0) ? \
-                - x : x );
+                ceil_int(x, T(static_cast<llint_t>(x))) );
+}
+
+}
+
+/**
+ * Compile-time ceil function
+ *
+ * @param x a real-valued input.
+ * @return computes the ceiling-value of the input.
+ */
+
+template<typename T>
+constexpr
+return_t<T>
+ceil(const T x)
+noexcept
+{
+    return internal::ceil_check( static_cast<return_t<T>>(x) );
 }
 
 #endif

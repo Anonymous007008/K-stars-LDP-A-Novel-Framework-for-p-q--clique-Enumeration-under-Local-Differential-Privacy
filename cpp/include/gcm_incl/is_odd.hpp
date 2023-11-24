@@ -18,28 +18,25 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
-
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+/*
+ * compile-time check if integer is odd
  */
 
-template<typename T>
+#ifndef _gcem_is_odd_HPP
+#define _gcem_is_odd_HPP
+
+namespace internal
+{
+
 constexpr
-T
-abs(const T x)
+bool
+is_odd(const llint_t x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+    // return( x % llint_t(2) == llint_t(0) ? false : true );
+    return (x & 1U) != 0;
+}
+
 }
 
 #endif

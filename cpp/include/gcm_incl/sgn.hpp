@@ -18,28 +18,28 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+#ifndef _gcem_sgn_HPP
+#define _gcem_sgn_HPP
 
 /**
- * Compile-time absolute value function
+ * Compile-time sign function
  *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+ * @param x a real-valued input
+ * @return a value \f$ y \f$ such that \f[ y = \begin{cases} 1 \ &\text{ if } x > 0 \\ 0 \ &\text{ if } x = 0 \\ -1 \ &\text{ if } x < 0 \end{cases} \f]
  */
 
 template<typename T>
 constexpr
-T
-abs(const T x)
+int
+sgn(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
+    return( // positive
+            x > T(0) ?  1 :
+            // negative
+            x < T(0) ? -1 :
             // else
-            x < T(0) ? \
-                - x : x );
+                0 );
 }
 
 #endif

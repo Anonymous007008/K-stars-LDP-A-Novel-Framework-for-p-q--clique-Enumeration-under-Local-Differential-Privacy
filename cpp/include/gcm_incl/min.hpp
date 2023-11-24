@@ -18,28 +18,24 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+#ifndef _gcem_min_HPP
+#define _gcem_min_HPP
 
 /**
- * Compile-time absolute value function
+ * Compile-time pairwise minimum function
  *
  * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+ * @param y a real-valued input.
+ * @return Computes the minimum between \c x and \c y, where \c x and \c y have the same type (e.g., \c int, \c double, etc.)
  */
 
-template<typename T>
+template<typename T1, typename T2>
 constexpr
-T
-abs(const T x)
+common_t<T1,T2>
+min(const T1 x, const T2 y)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+    return( y > x ? x : y );
 }
 
 #endif

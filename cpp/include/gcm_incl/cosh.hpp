@@ -18,28 +18,48 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
-
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+/*
+ * compile-time hyperbolic cosine function
  */
+
+#ifndef _gcem_cosh_HPP
+#define _gcem_cosh_HPP
+
+namespace internal
+{
 
 template<typename T>
 constexpr
 T
-abs(const T x)
+cosh_compute(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
+    return( // NaN check
+            is_nan(x) ? \
+                GCLIM<T>::quiet_NaN() :
+            // indistinguishable from zero
+            GCLIM<T>::min() > abs(x) ? \
+                T(1) : 
             // else
-            x < T(0) ? \
-                - x : x );
+                (exp(x) + exp(-x)) / T(2) );
+}
+
+}
+
+/**
+ * Compile-time hyperbolic cosine function
+ *
+ * @param x a real-valued input.
+ * @return the hyperbolic cosine function using \f[ \cosh(x) = \frac{\exp(x) + \exp(-x)}{2} \f]
+ */
+
+template<typename T>
+constexpr
+return_t<T>
+cosh(const T x)
+noexcept
+{
+    return internal::cosh_compute( static_cast<return_t<T>>(x) );
 }
 
 #endif

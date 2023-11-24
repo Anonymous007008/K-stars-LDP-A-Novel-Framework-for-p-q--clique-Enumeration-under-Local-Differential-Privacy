@@ -18,28 +18,30 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
-
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+/*
+ * compile-time find_exponent function
  */
+
+#ifndef _gcem_find_exponent_HPP
+#define _gcem_find_exponent_HPP
+
+namespace internal
+{
 
 template<typename T>
 constexpr
-T
-abs(const T x)
+llint_t
+find_exponent(const T x, const llint_t exponent)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
+    return( x < T(1)  ? \
+                find_exponent(x*T(10),exponent - llint_t(1)) :
+            x > T(10) ? \
+                find_exponent(x/T(10),exponent + llint_t(1)) :
             // else
-            x < T(0) ? \
-                - x : x );
+                exponent );
+}
+
 }
 
 #endif

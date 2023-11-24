@@ -18,28 +18,27 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+#ifndef _gcem_signbit_HPP
+#define _gcem_signbit_HPP
 
 /**
- * Compile-time absolute value function
+ * Compile-time sign bit detection function
  *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+ * @param x a real-valued input
+ * @return return true if \c x is negative, otherwise return false.
  */
 
-template<typename T>
-constexpr
-T
-abs(const T x)
+template <typename T>
+constexpr 
+bool
+signbit(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+#ifdef _MSC_VER
+    return( (x == T(0)) ? (_fpclass(x) == _FPCLASS_NZ) : (x < T(0)) );
+#else
+    return GCEM_SIGNBIT(x);
+#endif
 }
 
 #endif

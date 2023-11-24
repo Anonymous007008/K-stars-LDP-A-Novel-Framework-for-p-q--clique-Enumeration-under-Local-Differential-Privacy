@@ -18,28 +18,56 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+#ifndef _gcem_trunc_HPP
+#define _gcem_trunc_HPP
 
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
- */
+namespace internal
+{
 
 template<typename T>
 constexpr
 T
-abs(const T x)
+trunc_int(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
+    return( T(static_cast<llint_t>(x)) );
+}
+
+template<typename T>
+constexpr
+T
+trunc_check(const T x)
+noexcept
+{
+    return( // NaN check
+            is_nan(x) ? \
+                GCLIM<T>::quiet_NaN() :
+            // +/- infinite
+            !is_finite(x) ? \
+                x :
+            // signed-zero cases
+            GCLIM<T>::min() > abs(x) ? \
+                x :
             // else
-            x < T(0) ? \
-                - x : x );
+                trunc_int(x) );
+}
+
+}
+
+/**
+ * Compile-time trunc function
+ *
+ * @param x a real-valued input.
+ * @return computes the trunc-value of the input, essentially returning the integer part of the input.
+ */
+
+template<typename T>
+constexpr
+return_t<T>
+trunc(const T x)
+noexcept
+{
+    return internal::trunc_check( static_cast<return_t<T>>(x) );
 }
 
 #endif

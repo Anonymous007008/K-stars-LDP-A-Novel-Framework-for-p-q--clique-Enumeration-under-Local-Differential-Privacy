@@ -18,28 +18,48 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+#ifndef _gcem_lcm_HPP
+#define _gcem_lcm_HPP
 
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
- */
+namespace internal
+{
 
 template<typename T>
 constexpr
 T
-abs(const T x)
+lcm_compute(const T a, const T b)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+    return abs(a * (b / gcd(a,b)));
+}
+
+template<typename T1, typename T2, typename TC = common_t<T1,T2>>
+constexpr
+TC
+lcm_type_check(const T1 a, const T2 b)
+noexcept
+{
+    return lcm_compute(static_cast<TC>(a),static_cast<TC>(b));
+}
+
+}
+
+/**
+ * Compile-time least common multiple (LCM) function
+ *
+ * @param a integral-valued input.
+ * @param b integral-valued input.
+ * @return the least common multiple between integers \c a and \c b using the representation \f[ \text{lcm}(a,b) = \dfrac{| a b |}{\text{gcd}(a,b)} \f]
+ * where \f$ \text{gcd}(a,b) \f$ denotes the greatest common divisor between \f$ a \f$ and \f$ b \f$.
+ */
+
+template<typename T1, typename T2>
+constexpr
+common_t<T1,T2>
+lcm(const T1 a, const T2 b)
+noexcept
+{
+    return internal::lcm_type_check(a,b);
 }
 
 #endif

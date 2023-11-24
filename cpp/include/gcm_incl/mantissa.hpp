@@ -18,28 +18,30 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
-
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+/*
+ * compile-time mantissa function
  */
+
+#ifndef _gcem_mantissa_HPP
+#define _gcem_mantissa_HPP
+
+namespace internal
+{
 
 template<typename T>
 constexpr
 T
-abs(const T x)
+mantissa(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
+    return( x < T(1) ? \
+                mantissa(x*T(10)) : 
+            x > T(10) ? \
+                mantissa(x/T(10)) :
             // else
-            x < T(0) ? \
-                - x : x );
+                x );
+}
+
 }
 
 #endif

@@ -18,28 +18,61 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
-
-/**
- * Compile-time absolute value function
- *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+/*
+ * compile-time check if a float is not NaN-valued or +/-Inf
  */
+
+#ifndef _gcem_is_finite_HPP
+#define _gcem_is_finite_HPP
+
+namespace internal
+{
 
 template<typename T>
 constexpr
-T
-abs(const T x)
+bool
+is_finite(const T x)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+    return (!is_nan(x)) && (!is_inf(x));
+}
+
+template<typename T1, typename T2>
+constexpr
+bool
+any_finite(const T1 x, const T2 y)
+noexcept
+{
+    return( is_finite(x) || is_finite(y) );
+}
+
+template<typename T1, typename T2>
+constexpr
+bool
+all_finite(const T1 x, const T2 y)
+noexcept
+{
+    return( is_finite(x) && is_finite(y) );
+}
+
+template<typename T1, typename T2, typename T3>
+constexpr
+bool
+any_finite(const T1 x, const T2 y, const T3 z)
+noexcept
+{
+    return( is_finite(x) || is_finite(y) || is_finite(z) );
+}
+
+template<typename T1, typename T2, typename T3>
+constexpr
+bool
+all_finite(const T1 x, const T2 y, const T3 z)
+noexcept
+{
+    return( is_finite(x) && is_finite(y) && is_finite(z) );
+}
+
 }
 
 #endif

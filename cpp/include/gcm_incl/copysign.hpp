@@ -18,28 +18,24 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+#ifndef _gcem_copysign_HPP
+#define _gcem_copysign_HPP
 
 /**
- * Compile-time absolute value function
+ * Compile-time copy sign function
  *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+ * @param x a real-valued input
+ * @param y a real-valued input
+ * @return replace the signbit of \c x with the signbit of \c y.
  */
 
-template<typename T>
+template <typename T1, typename T2>
 constexpr
-T
-abs(const T x)
+T1
+copysign(const T1 x, const T2 y)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+    return( signbit(x) != signbit(y) ? -x : x );
 }
 
 #endif

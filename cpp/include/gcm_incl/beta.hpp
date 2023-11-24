@@ -18,28 +18,25 @@
   ##
   ################################################################################*/
 
-#ifndef _gcem_abs_HPP
-#define _gcem_abs_HPP
+#ifndef _gcem_beta_HPP
+#define _gcem_beta_HPP
 
 /**
- * Compile-time absolute value function
+ * Compile-time beta function
  *
- * @param x a real-valued input.
- * @return the absolute value of \c x, \f$ |x| \f$.
+ * @param a a real-valued input.
+ * @param b a real-valued input.
+ * @return the beta function using \f[ \text{B}(\alpha,\beta) := \int_0^1 t^{\alpha - 1} (1-t)^{\beta - 1} dt = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)} \f]
+ * where \f$ \Gamma \f$ denotes the gamma function.
  */
 
-template<typename T>
+template<typename T1, typename T2>
 constexpr
-T
-abs(const T x)
+common_return_t<T1,T2>
+beta(const T1 a, const T2 b)
 noexcept
 {
-    return( // deal with signed-zeros
-            x == T(0) ? \
-                T(0) :
-            // else
-            x < T(0) ? \
-                - x : x );
+    return exp( lbeta(a,b) );
 }
 
 #endif
