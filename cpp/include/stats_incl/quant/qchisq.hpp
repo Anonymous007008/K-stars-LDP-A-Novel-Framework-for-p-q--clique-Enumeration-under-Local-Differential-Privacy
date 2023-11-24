@@ -19,11 +19,11 @@
   ################################################################################*/
 
 /*
- * quantile function of the univariate Bernoulli distribution
+ * quantile function of the chi-squared distribution
  */
 
-#ifndef _statslib_qbern_HPP
-#define _statslib_qbern_HPP
+#ifndef _statslib_qchisq_HPP
+#define _statslib_qchisq_HPP
 
 //
 // single input
@@ -31,7 +31,7 @@
 template<typename T1, typename T2>
 statslib_constexpr
 common_return_t<T1,T2>
-qbern(const T1 p, const T2 prob_par) noexcept;
+qchisq(const T1 p, const T2 dof_par) noexcept;
 
 //
 // vector/matrix input
@@ -40,38 +40,38 @@ qbern(const T1 p, const T2 prob_par) noexcept;
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>>
 statslib_inline
 std::vector<rT>
-qbern(const std::vector<eT>& x, const T1 prob_par);
+qchisq(const std::vector<eT>& x, const T1 dof_par);
 #endif
 
 #ifdef STATS_ENABLE_ARMA_WRAPPERS
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>>
 statslib_inline
 ArmaMat<rT>
-qbern(const ArmaMat<eT>& X, const T1 prob_par);
+qchisq(const ArmaMat<eT>& X, const T1 dof_par);
 
 template<typename mT, typename tT, typename T1>
 statslib_inline
 mT 
-qbern(const ArmaGen<mT,tT>& X, const T1 prob_par);
+qchisq(const ArmaGen<mT,tT>& X, const T1 dof_par);
 #endif
 
 #ifdef STATS_ENABLE_BLAZE_WRAPPERS
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>, bool To = blaze::columnMajor>
 statslib_inline
 BlazeMat<rT,To>
-qbern(const BlazeMat<eT,To>& X, const T1 prob_par);
+qchisq(const BlazeMat<eT,To>& X, const T1 dof_par);
 #endif
 
 #ifdef STATS_ENABLE_EIGEN_WRAPPERS
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>, int iTr = Eigen::Dynamic, int iTc = Eigen::Dynamic>
 statslib_inline
 EigenMat<rT,iTr,iTc>
-qbern(const EigenMat<eT,iTr,iTc>& X, const T1 prob_par);
+qchisq(const EigenMat<eT,iTr,iTc>& X, const T1 dof_par);
 #endif
 
 //
 // include implementation files
 
-#include "qbern.ipp"
+#include "qchisq.ipp"
 
 #endif
