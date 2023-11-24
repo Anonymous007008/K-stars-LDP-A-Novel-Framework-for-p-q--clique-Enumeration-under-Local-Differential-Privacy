@@ -19,7 +19,7 @@
   ################################################################################*/
 
 /*
- * Sanity checks for the Bernoulli distribution
+ * Sanity checks for the Beta distribution
  */
 
 namespace internal
@@ -28,22 +28,28 @@ namespace internal
 template<typename T>
 statslib_constexpr
 bool
-bern_sanity_check(const T prob_par)
+beta_sanity_check(const T a_par, const T b_par)
 noexcept
 {
-    return( GCINT::is_nan(prob_par) ? \
+    return( GCINT::any_nan(a_par,b_par) ? \
                 false :
             //
-            GCINT::is_inf(prob_par) ? \
+            a_par < T(0) ? \
                 false :
             //
-            prob_par < T(0) ? \
-                false :
-            //
-            prob_par > T(1) ? \
+            b_par < T(0) ? \
                 false :
             //
                 true );
+}
+
+template<typename T>
+statslib_constexpr
+bool
+beta_sanity_check(const T inp_val, const T a_par, const T b_par)
+noexcept
+{
+    return (!GCINT::is_nan(inp_val)) && beta_sanity_check(a_par,b_par);
 }
 
 }

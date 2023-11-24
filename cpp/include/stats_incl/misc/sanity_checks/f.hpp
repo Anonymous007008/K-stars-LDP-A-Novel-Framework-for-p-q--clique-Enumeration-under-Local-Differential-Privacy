@@ -19,7 +19,7 @@
   ################################################################################*/
 
 /*
- * Sanity checks for the Bernoulli distribution
+ * Sanity checks for the F distribution
  */
 
 namespace internal
@@ -28,22 +28,28 @@ namespace internal
 template<typename T>
 statslib_constexpr
 bool
-bern_sanity_check(const T prob_par)
+f_sanity_check(const T df1_par, const T df2_par)
 noexcept
 {
-    return( GCINT::is_nan(prob_par) ? \
+    return( GCINT::any_nan(df1_par,df2_par) ? \
                 false :
             //
-            GCINT::is_inf(prob_par) ? \
+            STLIM<T>::epsilon() > df1_par ? \
                 false :
             //
-            prob_par < T(0) ? \
-                false :
-            //
-            prob_par > T(1) ? \
+            STLIM<T>::epsilon() > df2_par ? \
                 false :
             //
                 true );
+}
+
+template<typename T>
+statslib_constexpr
+bool
+f_sanity_check(const T inp_val, const T df1_par, const T df2_par)
+noexcept
+{
+    return (!GCINT::is_nan(inp_val)) && f_sanity_check(df1_par,df2_par);
 }
 
 }

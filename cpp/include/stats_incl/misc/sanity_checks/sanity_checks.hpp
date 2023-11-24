@@ -18,32 +18,30 @@
   ##
   ################################################################################*/
 
-/*
- * Sanity checks for the Bernoulli distribution
- */
+#ifndef _statslib_sanity_checks_HPP
+#define _statslib_sanity_checks_HPP
 
-namespace internal
-{
+#include "prob_val.hpp"
 
-template<typename T>
-statslib_constexpr
-bool
-bern_sanity_check(const T prob_par)
-noexcept
-{
-    return( GCINT::is_nan(prob_par) ? \
-                false :
-            //
-            GCINT::is_inf(prob_par) ? \
-                false :
-            //
-            prob_par < T(0) ? \
-                false :
-            //
-            prob_par > T(1) ? \
-                false :
-            //
-                true );
-}
+#include "bern.hpp"
+#include "beta.hpp"
+#include "binom.hpp"
+#include "cauchy.hpp"
+#include "chisq.hpp"
+#include "exp.hpp"
+#include "f.hpp"
+#include "gamma.hpp"
+#include "invgamma.hpp"
+// #include "invwish.hpp"
+#include "laplace.hpp"
+#include "lnorm.hpp"
+#include "logis.hpp"
+// #include "mvnorm.hpp"
+#include "norm.hpp"
+#include "pois.hpp"
+#include "t.hpp"
+#include "unif.hpp"
+#include "weibull.hpp"
+// #include "wish.hpp"
 
-}
+#endif

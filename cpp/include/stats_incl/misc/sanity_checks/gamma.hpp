@@ -19,7 +19,7 @@
   ################################################################################*/
 
 /*
- * Sanity checks for the Bernoulli distribution
+ * Sanity checks for the Gamma distribution
  */
 
 namespace internal
@@ -28,22 +28,28 @@ namespace internal
 template<typename T>
 statslib_constexpr
 bool
-bern_sanity_check(const T prob_par)
+gamma_sanity_check(const T shape_par, const T scale_par)
 noexcept
 {
-    return( GCINT::is_nan(prob_par) ? \
+    return( GCINT::any_nan(shape_par,scale_par) ? \
                 false :
             //
-            GCINT::is_inf(prob_par) ? \
+            shape_par < T(0) ? \
                 false :
             //
-            prob_par < T(0) ? \
-                false :
-            //
-            prob_par > T(1) ? \
+            STLIM<T>::epsilon() > scale_par ? \
                 false :
             //
                 true );
+}
+
+template<typename T>
+statslib_constexpr
+bool
+gamma_sanity_check(const T inp_val, const T shape_par, const T scale_par)
+noexcept
+{
+    return (!GCINT::is_nan(inp_val)) && gamma_sanity_check(shape_par,scale_par);
 }
 
 }

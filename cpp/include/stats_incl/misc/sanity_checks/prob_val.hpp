@@ -19,7 +19,7 @@
   ################################################################################*/
 
 /*
- * Sanity checks for the Bernoulli distribution
+ * Sanity checks for a probability value
  */
 
 namespace internal
@@ -28,19 +28,16 @@ namespace internal
 template<typename T>
 statslib_constexpr
 bool
-bern_sanity_check(const T prob_par)
+prob_val_check(const T prob_val)
 noexcept
 {
-    return( GCINT::is_nan(prob_par) ? \
+    return( GCINT::is_nan(prob_val) ? \
                 false :
             //
-            GCINT::is_inf(prob_par) ? \
+            prob_val < T(0) ? \
                 false :
             //
-            prob_par < T(0) ? \
-                false :
-            //
-            prob_par > T(1) ? \
+            prob_val > T(1) ? \
                 false :
             //
                 true );

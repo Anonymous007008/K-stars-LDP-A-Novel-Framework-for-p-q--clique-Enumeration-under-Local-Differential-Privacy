@@ -19,7 +19,7 @@
   ################################################################################*/
 
 /*
- * Sanity checks for the Bernoulli distribution
+ * Sanity checks for the Exponential distribution
  */
 
 namespace internal
@@ -28,22 +28,25 @@ namespace internal
 template<typename T>
 statslib_constexpr
 bool
-bern_sanity_check(const T prob_par)
+exp_sanity_check(const T rate_par)
 noexcept
 {
-    return( GCINT::is_nan(prob_par) ? \
+    return( GCINT::is_nan(rate_par) ? \
                 false :
             //
-            GCINT::is_inf(prob_par) ? \
-                false :
-            //
-            prob_par < T(0) ? \
-                false :
-            //
-            prob_par > T(1) ? \
+            rate_par < T(0) ? \
                 false :
             //
                 true );
+}
+
+template<typename T>
+statslib_constexpr
+bool
+exp_sanity_check(const T inp_val, const T rate_par)
+noexcept
+{
+    return (!GCINT::is_nan(inp_val)) && exp_sanity_check(rate_par);
 }
 
 }
