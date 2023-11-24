@@ -1,6 +1,6 @@
 # K-stars-LDP-A-Novel-Framework-for-p-q--clique-Enumeration-under-Local-Differential-Privacy
 ## Overview
-This is the official code of k-stars LDP. Datasets in the experiment should be put in the directory: ./data/<dataset>/ . The source code of k-stars LDP is put in the directory: ./cpp/
+This is the official code of k-stars LDP. Datasets in the experiment should be put in the directory: ./data/[dataset]/ . The source code of k-stars LDP is put in the directory: ./cpp/
 
 ## Requirements
 The gcc version we use in the experiment is 11.4.0.
