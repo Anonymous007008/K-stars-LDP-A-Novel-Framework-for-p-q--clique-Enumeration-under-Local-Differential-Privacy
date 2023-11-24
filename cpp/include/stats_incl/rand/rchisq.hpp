@@ -18,31 +18,39 @@
   ##
   ################################################################################*/
 
-#ifndef _statslib_rand_HPP
-#define _statslib_rand_HPP
+/* 
+ * Sample from a Chi-squared distribution
+ */
 
-#include "runif.hpp"
-#include "rnorm.hpp"
+#ifndef _statslib_rchisq_HPP
+#define _statslib_rchisq_HPP
 
-#include "rgamma.hpp"
+//
+// scalar output
 
-#include "rbern.hpp"
-#include "rbeta.hpp"
-#include "rbinom.hpp"
-#include "rcauchy.hpp"
-#include "rchisq.hpp"
-#include "rexp.hpp"
-#include "rf.hpp"
-#include "rinvgamma.hpp"
-#include "rinvwish.hpp"
-#include "rlaplace.hpp"
-#include "rlnorm.hpp"
-#include "rlogis.hpp"
-#include "rmultinom.hpp"
-#include "rmvnorm.hpp"
-#include "rpois.hpp"
-#include "rt.hpp"
-#include "rweibull.hpp"
-#include "rwish.hpp"
+template<typename T>
+statslib_inline
+return_t<T>
+rchisq(const T dof_par, rand_engine_t& engine);
+
+template<typename T>
+statslib_inline
+return_t<T>
+rchisq(const T dof_par, const ullint_t seed_val = std::random_device{}());
+
+//
+// vector/matrix output
+
+#ifdef STATS_ENABLE_INTERNAL_VEC_FEATURES
+template<typename mT, typename T1>
+statslib_inline
+mT
+rchisq(const ullint_t n, const ullint_t k, const T1 dof_par);
+#endif
+
+//
+// include implementation files
+
+#include "rchisq.ipp"
 
 #endif

@@ -18,31 +18,21 @@
   ##
   ################################################################################*/
 
-#ifndef _statslib_rand_HPP
-#define _statslib_rand_HPP
+/*
+ * Sample from a multinomial distribution
+ */
 
-#include "runif.hpp"
-#include "rnorm.hpp"
+#ifndef _statslib_rmultinom_HPP
+#define _statslib_rmultinom_HPP
 
-#include "rgamma.hpp"
+#ifdef STATS_ENABLE_MATRIX_FEATURES
 
-#include "rbern.hpp"
-#include "rbeta.hpp"
-#include "rbinom.hpp"
-#include "rcauchy.hpp"
-#include "rchisq.hpp"
-#include "rexp.hpp"
-#include "rf.hpp"
-#include "rinvgamma.hpp"
-#include "rinvwish.hpp"
-#include "rlaplace.hpp"
-#include "rlnorm.hpp"
-#include "rlogis.hpp"
-#include "rmultinom.hpp"
-#include "rmvnorm.hpp"
-#include "rpois.hpp"
-#include "rt.hpp"
-#include "rweibull.hpp"
-#include "rwish.hpp"
+template<typename mT, typename eT = double>
+statslib_inline
+mT rmultinom(const mT& prob);
+
+#include "rmultinom.ipp"
+
+#endif
 
 #endif

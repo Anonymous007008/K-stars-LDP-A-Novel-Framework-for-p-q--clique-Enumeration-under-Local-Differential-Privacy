@@ -18,31 +18,43 @@
   ##
   ################################################################################*/
 
-#ifndef _statslib_rand_HPP
-#define _statslib_rand_HPP
+/*
+ * Sample from a normal distribution
+ */
 
-#include "runif.hpp"
-#include "rnorm.hpp"
+#ifndef _statslib_rnorm_HPP
+#define _statslib_rnorm_HPP
 
-#include "rgamma.hpp"
+//
+// scalar output
 
-#include "rbern.hpp"
-#include "rbeta.hpp"
-#include "rbinom.hpp"
-#include "rcauchy.hpp"
-#include "rchisq.hpp"
-#include "rexp.hpp"
-#include "rf.hpp"
-#include "rinvgamma.hpp"
-#include "rinvwish.hpp"
-#include "rlaplace.hpp"
-#include "rlnorm.hpp"
-#include "rlogis.hpp"
-#include "rmultinom.hpp"
-#include "rmvnorm.hpp"
-#include "rpois.hpp"
-#include "rt.hpp"
-#include "rweibull.hpp"
-#include "rwish.hpp"
+template<typename T1, typename T2>
+statslib_inline
+common_return_t<T1,T2>
+rnorm(const T1 mu_par, const T2 sigma_par, rand_engine_t& engine);
+
+template<typename T1, typename T2>
+statslib_inline
+common_return_t<T1,T2>
+rnorm(const T1 mu_par, const T2 sigma_par, const ullint_t seed_val = std::random_device{}());
+
+template<typename T = double>
+statslib_inline
+T rnorm();
+
+//
+// vector/matrix output
+
+#ifdef STATS_ENABLE_INTERNAL_VEC_FEATURES
+template<typename mT, typename T1 = double, typename T2 = double>
+statslib_inline
+mT
+rnorm(const ullint_t n, const ullint_t k, const T1 mu_par = T1(0), const T2 sigma_par = T2(1));
+#endif
+
+//
+// include implementation files
+
+#include "rnorm.ipp"
 
 #endif

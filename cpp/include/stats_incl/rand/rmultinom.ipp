@@ -18,31 +18,42 @@
   ##
   ################################################################################*/
 
-#ifndef _statslib_rand_HPP
-#define _statslib_rand_HPP
+/*
+ * Sample from a multinomial distribution
+ */
 
-#include "runif.hpp"
-#include "rnorm.hpp"
+template<typename mT, typename eT>
+statslib_inline
+mT
+rmultinom(const mT& prob)
+{
+    const ullint_t n_prob = mat_ops::n_elem(prob);
 
-#include "rgamma.hpp"
+    ullint_t n_j = n_prob;
 
-#include "rbern.hpp"
-#include "rbeta.hpp"
-#include "rbinom.hpp"
-#include "rcauchy.hpp"
-#include "rchisq.hpp"
-#include "rexp.hpp"
-#include "rf.hpp"
-#include "rinvgamma.hpp"
-#include "rinvwish.hpp"
-#include "rlaplace.hpp"
-#include "rlnorm.hpp"
-#include "rlogis.hpp"
-#include "rmultinom.hpp"
-#include "rmvnorm.hpp"
-#include "rpois.hpp"
-#include "rt.hpp"
-#include "rweibull.hpp"
-#include "rwish.hpp"
+    //
 
-#endif
+    mT ret(n_prob,1);
+    const mT prob_csum = mat_ops::cumsum(prob);
+
+    eT p_j = prob(0,0);
+    ret(0,0) = rbinom(n_j,p_j);
+
+    //
+
+    ullint_t ret_sum = ret(0,0);
+    
+    for (ullint_t j = 1U; j < n_prob; j++)
+    {
+        p_j = prob(j,0) / (eT(1) - prob_csum(j-1,0));
+        n_j = n_prob - ret_sum;
+        
+        ret(j,0) = rbinom(n_j,p_j);
+        
+        ret_sum += ret(j,0);
+    }
+
+    //
+
+    return ret;
+}

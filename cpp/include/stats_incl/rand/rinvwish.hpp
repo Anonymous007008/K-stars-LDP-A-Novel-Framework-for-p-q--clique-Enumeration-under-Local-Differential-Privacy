@@ -18,31 +18,28 @@
   ##
   ################################################################################*/
 
-#ifndef _statslib_rand_HPP
-#define _statslib_rand_HPP
+/* 
+ * Sample from an inverse-Wishart distribution
+ */
 
-#include "runif.hpp"
-#include "rnorm.hpp"
+#ifndef _statslib_rinvwish_HPP
+#define _statslib_rinvwish_HPP
 
-#include "rgamma.hpp"
+#ifdef STATS_ENABLE_MATRIX_FEATURES
 
-#include "rbern.hpp"
-#include "rbeta.hpp"
-#include "rbinom.hpp"
-#include "rcauchy.hpp"
-#include "rchisq.hpp"
-#include "rexp.hpp"
-#include "rf.hpp"
-#include "rinvgamma.hpp"
-#include "rinvwish.hpp"
-#include "rlaplace.hpp"
-#include "rlnorm.hpp"
-#include "rlogis.hpp"
-#include "rmultinom.hpp"
-#include "rmvnorm.hpp"
-#include "rpois.hpp"
-#include "rt.hpp"
-#include "rweibull.hpp"
-#include "rwish.hpp"
+template<typename mT, typename pT, typename not_arma_mat<mT>::type* = nullptr>
+statslib_inline
+mT rinvwish(const mT& Psi_par, const pT nu_par, const bool pre_chol = false);
+
+// specializations
+#ifdef STATS_ENABLE_ARMA_WRAPPERS
+template<typename mT, typename eT, typename pT>
+statslib_inline
+mT rinvwish(const ArmaMat<eT>& Psi_par, const pT nu_par, const bool pre_chol = false);
+#endif
+
+#include "rinvwish.ipp"
+
+#endif
 
 #endif
