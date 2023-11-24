@@ -18,25 +18,12 @@
   ##
   ################################################################################*/
 
-/*
- * exp-if-true function
- */
+#ifndef _statslib_internal_fns_HPP
+#define _statslib_internal_fns_HPP
 
-#ifndef _statslib_exp_if_HPP
-#define _statslib_exp_if_HPP
+#include "log_if.hpp"
+#include "exp_if.hpp"
 
-namespace internal
-{
-
-template<typename T>
-statslib_constexpr
-T
-exp_if(const T x, const bool exp_form)
-noexcept
-{
-    return exp_form ? stmath::exp(x) : x;
-}
-
-}
+#include "statslib_defs.hpp"
 
 #endif

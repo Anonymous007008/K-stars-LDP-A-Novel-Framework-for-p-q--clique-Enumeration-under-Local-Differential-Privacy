@@ -19,11 +19,11 @@
   ################################################################################*/
 
 /*
- * exp-if-true function
+ * log-if-true function
  */
 
-#ifndef _statslib_exp_if_HPP
-#define _statslib_exp_if_HPP
+#ifndef _statslib_log_if_HPP
+#define _statslib_log_if_HPP
 
 namespace internal
 {
@@ -31,10 +31,28 @@ namespace internal
 template<typename T>
 statslib_constexpr
 T
-exp_if(const T x, const bool exp_form)
+log_if(const T x, const bool log_form)
 noexcept
 {
-    return exp_form ? stmath::exp(x) : x;
+    return log_form ? stmath::log(x) : x;
+}
+
+template<typename T>
+statslib_constexpr
+T
+log_zero_if(const bool log_form)
+noexcept
+{
+    return log_form ? - STLIM<T>::infinity() : T(0);
+}
+
+template<typename T>
+statslib_constexpr
+T
+log_one_if(const bool log_form)
+noexcept
+{
+    return log_form ? T(0) : T(1);
 }
 
 }
