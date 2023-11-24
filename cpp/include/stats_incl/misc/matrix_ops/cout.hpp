@@ -23,91 +23,47 @@
  */
 
 //
-// sum all elements and sum of squared values
+// printing
 
 #ifdef STATS_ENABLE_STDVEC_WRAPPERS
 template<typename eT>
 statslib_inline
-eT
-accu(const std::vector<eT>& X)
+void
+cout_output(const std::vector<eT>& X)
 {
-    // const eT sum_val = std::accumulate(X.begin(), X.end(), eT(0));
-    eT sum_val = eT(0);
-    for (auto x : X)
-        sum_val += x;
-    return sum_val;
-}
-
-template<typename eT>
-statslib_inline
-eT
-sqaccu(const std::vector<eT>& X)
-{
-    eT sum_val = eT(0);
-    for (auto& x : X)
-        sum_val += x*x;
-    return sum_val;
+    std::cout << "   ";
+    for (const auto x: X)
+        std::cout << x << "  ";
+    std::cout << "\n";
 }
 #endif
 
 #ifdef STATS_ENABLE_ARMA_WRAPPERS
 template<typename eT>
 statslib_inline
-eT
-accu(const ArmaMat<eT>& X)
+void
+cout_output(const ArmaMat<eT>& X)
 {
-    return arma::accu(X);
-}
-
-template<typename eT>
-statslib_inline
-eT
-sqaccu(const ArmaMat<eT>& X)
-{
-    return arma::accu(arma::pow(X,2));
+    arma::cout << X << "\n";
 }
 #endif
 
 #ifdef STATS_ENABLE_BLAZE_WRAPPERS
 template<typename eT, bool To>
 statslib_inline
-eT
-accu(const BlazeMat<eT,To>& X)
+void
+cout_output(const BlazeMat<eT,To>& X)
 {
-    eT out_val = blaze::sum(X);
-    return out_val;
-}
-
-template<typename eT, bool To>
-statslib_inline
-eT
-sqaccu(const BlazeMat<eT,To>& X)
-{
-    eT out_val = blaze::sum(blaze::pow(X,2));
-    return out_val;
+    std::cout << X << "\n";
 }
 #endif
 
 #ifdef STATS_ENABLE_EIGEN_WRAPPERS
 template<typename eT, int iTr, int iTc>
 statslib_inline
-eT
-accu(const EigenMat<eT,iTr,iTc>& X)
+void
+cout_output(const EigenMat<eT,iTr,iTc>& X)
 {
-    return X.sum();
-}
-
-template<typename eT, int iTr, int iTc>
-statslib_inline
-eT
-sqaccu(const EigenMat<eT,iTr,iTc>& X)
-{
-    // const eT* vals = X.data();
-    // eT out_val = eT(0);
-    // for (ullint_t j=0U; j < n_elem(X); ++j) {
-    //     out_val += vals[j]*vals[j];
-    // }
-    // return out_val;
-    return (X.pow(2)).sum();
+    std::cout << X << "\n";
 }
 #endif

@@ -23,30 +23,15 @@
  */
 
 //
-// sum all elements and sum of squared values
+// vector mean
 
 #ifdef STATS_ENABLE_STDVEC_WRAPPERS
 template<typename eT>
 statslib_inline
 eT
-accu(const std::vector<eT>& X)
+mean(const std::vector<eT>& X)
 {
-    // const eT sum_val = std::accumulate(X.begin(), X.end(), eT(0));
-    eT sum_val = eT(0);
-    for (auto x : X)
-        sum_val += x;
-    return sum_val;
-}
-
-template<typename eT>
-statslib_inline
-eT
-sqaccu(const std::vector<eT>& X)
-{
-    eT sum_val = eT(0);
-    for (auto& x : X)
-        sum_val += x*x;
-    return sum_val;
+    return accu(X) / static_cast<eT>(X.size());
 }
 #endif
 
@@ -54,17 +39,9 @@ sqaccu(const std::vector<eT>& X)
 template<typename eT>
 statslib_inline
 eT
-accu(const ArmaMat<eT>& X)
+mean(const ArmaMat<eT>& X)
 {
-    return arma::accu(X);
-}
-
-template<typename eT>
-statslib_inline
-eT
-sqaccu(const ArmaMat<eT>& X)
-{
-    return arma::accu(arma::pow(X,2));
+    return arma::as_scalar(arma::mean(X));
 }
 #endif
 
@@ -72,19 +49,9 @@ sqaccu(const ArmaMat<eT>& X)
 template<typename eT, bool To>
 statslib_inline
 eT
-accu(const BlazeMat<eT,To>& X)
+mean(const BlazeMat<eT,To>& X)
 {
-    eT out_val = blaze::sum(X);
-    return out_val;
-}
-
-template<typename eT, bool To>
-statslib_inline
-eT
-sqaccu(const BlazeMat<eT,To>& X)
-{
-    eT out_val = blaze::sum(blaze::pow(X,2));
-    return out_val;
+    return accu(X) / static_cast<eT>(n_elem(X));
 }
 #endif
 
@@ -92,22 +59,8 @@ sqaccu(const BlazeMat<eT,To>& X)
 template<typename eT, int iTr, int iTc>
 statslib_inline
 eT
-accu(const EigenMat<eT,iTr,iTc>& X)
+mean(const EigenMat<eT,iTr,iTc>& X)
 {
-    return X.sum();
-}
-
-template<typename eT, int iTr, int iTc>
-statslib_inline
-eT
-sqaccu(const EigenMat<eT,iTr,iTc>& X)
-{
-    // const eT* vals = X.data();
-    // eT out_val = eT(0);
-    // for (ullint_t j=0U; j < n_elem(X); ++j) {
-    //     out_val += vals[j]*vals[j];
-    // }
-    // return out_val;
-    return (X.pow(2)).sum();
+    return X.mean();
 }
 #endif

@@ -23,30 +23,23 @@
  */
 
 //
-// sum all elements and sum of squared values
+// sum the absolute element-wise differences between two objects of the same dimensions
 
 #ifdef STATS_ENABLE_STDVEC_WRAPPERS
 template<typename eT>
 statslib_inline
 eT
-accu(const std::vector<eT>& X)
+sum_absdiff(const std::vector<eT>& X, const std::vector<eT>& Y)
 {
-    // const eT sum_val = std::accumulate(X.begin(), X.end(), eT(0));
-    eT sum_val = eT(0);
-    for (auto x : X)
-        sum_val += x;
-    return sum_val;
-}
+    eT val_out = eT(0);
+    ullint_t n_elem = X.size(); // assumes dim(X) = dim(Y)
 
-template<typename eT>
-statslib_inline
-eT
-sqaccu(const std::vector<eT>& X)
-{
-    eT sum_val = eT(0);
-    for (auto& x : X)
-        sum_val += x*x;
-    return sum_val;
+    for (ullint_t i=ullint_t(0); i < n_elem; ++i)
+    {
+        val_out += std::abs(X[i] - Y[i]);
+    }
+
+    return val_out;
 }
 #endif
 
@@ -54,17 +47,9 @@ sqaccu(const std::vector<eT>& X)
 template<typename eT>
 statslib_inline
 eT
-accu(const ArmaMat<eT>& X)
+sum_absdiff(const ArmaMat<eT>& X, const ArmaMat<eT>& Y)
 {
-    return arma::accu(X);
-}
-
-template<typename eT>
-statslib_inline
-eT
-sqaccu(const ArmaMat<eT>& X)
-{
-    return arma::accu(arma::pow(X,2));
+    return arma::accu(arma::abs(X - Y));
 }
 #endif
 
@@ -72,19 +57,9 @@ sqaccu(const ArmaMat<eT>& X)
 template<typename eT, bool To>
 statslib_inline
 eT
-accu(const BlazeMat<eT,To>& X)
+sum_absdiff(const BlazeMat<eT,To>& X, const BlazeMat<eT,To>& Y)
 {
-    eT out_val = blaze::sum(X);
-    return out_val;
-}
-
-template<typename eT, bool To>
-statslib_inline
-eT
-sqaccu(const BlazeMat<eT,To>& X)
-{
-    eT out_val = blaze::sum(blaze::pow(X,2));
-    return out_val;
+    return blaze::sum(blaze::abs(X-Y));
 }
 #endif
 
@@ -92,22 +67,8 @@ sqaccu(const BlazeMat<eT,To>& X)
 template<typename eT, int iTr, int iTc>
 statslib_inline
 eT
-accu(const EigenMat<eT,iTr,iTc>& X)
+sum_absdiff(const EigenMat<eT,iTr,iTc>& X, const EigenMat<eT,iTr,iTc>& Y)
 {
-    return X.sum();
-}
-
-template<typename eT, int iTr, int iTc>
-statslib_inline
-eT
-sqaccu(const EigenMat<eT,iTr,iTc>& X)
-{
-    // const eT* vals = X.data();
-    // eT out_val = eT(0);
-    // for (ullint_t j=0U; j < n_elem(X); ++j) {
-    //     out_val += vals[j]*vals[j];
-    // }
-    // return out_val;
-    return (X.pow(2)).sum();
+    return (X - Y).array().abs().sum();
 }
 #endif

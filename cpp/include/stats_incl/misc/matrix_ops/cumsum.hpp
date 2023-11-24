@@ -23,91 +23,71 @@
  */
 
 //
-// sum all elements and sum of squared values
+// Cumulative sum (assumes a vector form)
 
 #ifdef STATS_ENABLE_STDVEC_WRAPPERS
 template<typename eT>
 statslib_inline
-eT
-accu(const std::vector<eT>& X)
+std::vector<eT>
+cumsum(const std::vector<eT>& X)
 {
-    // const eT sum_val = std::accumulate(X.begin(), X.end(), eT(0));
-    eT sum_val = eT(0);
-    for (auto x : X)
-        sum_val += x;
-    return sum_val;
-}
+    std::vector<eT> mat_out = X;
 
-template<typename eT>
-statslib_inline
-eT
-sqaccu(const std::vector<eT>& X)
-{
-    eT sum_val = eT(0);
-    for (auto& x : X)
-        sum_val += x*x;
-    return sum_val;
+    eT* mem_out = mat_out.data();
+
+    for (ullint_t j=ullint_t(1); j < X.rows()*X.columns(); ++j)
+    {
+        mem_out[j] += mem_out[j-1];
+    }
+
+    return mat_out;
 }
 #endif
 
 #ifdef STATS_ENABLE_ARMA_WRAPPERS
 template<typename eT>
 statslib_inline
-eT
-accu(const ArmaMat<eT>& X)
+ArmaMat<eT>
+cumsum(const ArmaMat<eT>& X)
 {
-    return arma::accu(X);
-}
-
-template<typename eT>
-statslib_inline
-eT
-sqaccu(const ArmaMat<eT>& X)
-{
-    return arma::accu(arma::pow(X,2));
+    return arma::cumsum(X);
 }
 #endif
 
 #ifdef STATS_ENABLE_BLAZE_WRAPPERS
 template<typename eT, bool To>
 statslib_inline
-eT
-accu(const BlazeMat<eT,To>& X)
+BlazeMat<eT,To>
+cumsum(const BlazeMat<eT,To>& X)
 {
-    eT out_val = blaze::sum(X);
-    return out_val;
-}
+    BlazeMat<eT,To> mat_out = X;
 
-template<typename eT, bool To>
-statslib_inline
-eT
-sqaccu(const BlazeMat<eT,To>& X)
-{
-    eT out_val = blaze::sum(blaze::pow(X,2));
-    return out_val;
+    eT* mem_out = mat_out.data();
+
+    for (ullint_t j=ullint_t(1); j < X.rows()*X.columns(); ++j)
+    {
+        mem_out[j] += mem_out[j-1];
+    }
+
+    return mat_out;
 }
 #endif
 
 #ifdef STATS_ENABLE_EIGEN_WRAPPERS
 template<typename eT, int iTr, int iTc>
 statslib_inline
-eT
-accu(const EigenMat<eT,iTr,iTc>& X)
+EigenMat<eT,iTr,iTc>
+cumsum(const EigenMat<eT,iTr,iTc>& X)
 {
-    return X.sum();
-}
+    EigenMat<eT,iTr,iTc> mat_out = X;
 
-template<typename eT, int iTr, int iTc>
-statslib_inline
-eT
-sqaccu(const EigenMat<eT,iTr,iTc>& X)
-{
-    // const eT* vals = X.data();
-    // eT out_val = eT(0);
-    // for (ullint_t j=0U; j < n_elem(X); ++j) {
-    //     out_val += vals[j]*vals[j];
-    // }
-    // return out_val;
-    return (X.pow(2)).sum();
+    eT* mem_out = mat_out.data();
+
+    for (ullint_t j=ullint_t(1); j < X.rows()*X.cols(); ++j)
+    {
+        mem_out[j] += mem_out[j-1];
+    }
+
+    return mat_out;
 }
 #endif

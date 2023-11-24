@@ -23,91 +23,46 @@
  */
 
 //
-// sum all elements and sum of squared values
+// element-wise natural logarithm
 
 #ifdef STATS_ENABLE_STDVEC_WRAPPERS
 template<typename eT>
 statslib_inline
-eT
-accu(const std::vector<eT>& X)
+std::vector<eT>
+log(const std::vector<eT>& X)
 {
-    // const eT sum_val = std::accumulate(X.begin(), X.end(), eT(0));
-    eT sum_val = eT(0);
-    for (auto x : X)
-        sum_val += x;
-    return sum_val;
-}
-
-template<typename eT>
-statslib_inline
-eT
-sqaccu(const std::vector<eT>& X)
-{
-    eT sum_val = eT(0);
-    for (auto& x : X)
-        sum_val += x*x;
-    return sum_val;
+    std::vector<eT> vec_out = X;
+    std::for_each(vec_out.begin(), vec_out.end(), [](eT& x){ x = std::log(x);});
+    return vec_out;
 }
 #endif
 
 #ifdef STATS_ENABLE_ARMA_WRAPPERS
 template<typename eT>
 statslib_inline
-eT
-accu(const ArmaMat<eT>& X)
+ArmaMat<eT>
+log(const ArmaMat<eT>& X)
 {
-    return arma::accu(X);
-}
-
-template<typename eT>
-statslib_inline
-eT
-sqaccu(const ArmaMat<eT>& X)
-{
-    return arma::accu(arma::pow(X,2));
+    return arma::log(X);
 }
 #endif
 
 #ifdef STATS_ENABLE_BLAZE_WRAPPERS
 template<typename eT, bool To>
 statslib_inline
-eT
-accu(const BlazeMat<eT,To>& X)
+BlazeMat<eT,To>
+log(const BlazeMat<eT,To>& X)
 {
-    eT out_val = blaze::sum(X);
-    return out_val;
-}
-
-template<typename eT, bool To>
-statslib_inline
-eT
-sqaccu(const BlazeMat<eT,To>& X)
-{
-    eT out_val = blaze::sum(blaze::pow(X,2));
-    return out_val;
+    return blaze::log(X);
 }
 #endif
 
 #ifdef STATS_ENABLE_EIGEN_WRAPPERS
 template<typename eT, int iTr, int iTc>
 statslib_inline
-eT
-accu(const EigenMat<eT,iTr,iTc>& X)
+EigenMat<eT,iTr,iTc>
+log(const EigenMat<eT,iTr,iTc>& X)
 {
-    return X.sum();
-}
-
-template<typename eT, int iTr, int iTc>
-statslib_inline
-eT
-sqaccu(const EigenMat<eT,iTr,iTc>& X)
-{
-    // const eT* vals = X.data();
-    // eT out_val = eT(0);
-    // for (ullint_t j=0U; j < n_elem(X); ++j) {
-    //     out_val += vals[j]*vals[j];
-    // }
-    // return out_val;
-    return (X.pow(2)).sum();
+    return X.array().log().matrix();
 }
 #endif
