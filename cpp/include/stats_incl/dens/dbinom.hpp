@@ -19,19 +19,19 @@
   ################################################################################*/
 
 /*
- * pdf of the Bernoulli distribution
+ * pdf of the Binomial distribution
  */
 
-#ifndef _statslib_dbern_HPP
-#define _statslib_dbern_HPP
+#ifndef _statslib_dbinom_HPP
+#define _statslib_dbinom_HPP
 
 //
-// scalar input
+// single input
 
 template<typename T>
 statslib_constexpr
 return_t<T>
-dbern(const llint_t x, const T prob_par, const bool log_form = false) noexcept;
+dbinom(const llint_t x, const llint_t n_trials_par, const T prob_par, const bool log_form = false) noexcept;
 
 //
 // vector/matrix input
@@ -40,38 +40,38 @@ dbern(const llint_t x, const T prob_par, const bool log_form = false) noexcept;
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>>
 statslib_inline
 std::vector<rT>
-dbern(const std::vector<eT>& x, const T1 prob_par, const bool log_form = false);
+dbinom(const std::vector<eT>& x, const llint_t n_trials_par, const T1 prob_par, const bool log_form = false);
 #endif
 
 #ifdef STATS_ENABLE_ARMA_WRAPPERS
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>>
 statslib_inline
 ArmaMat<rT>
-dbern(const ArmaMat<eT>& X, const T1 prob_par, const bool log_form = false);
+dbinom(const ArmaMat<eT>& X, const llint_t n_trials_par, const T1 prob_par, const bool log_form = false);
 
 template<typename mT, typename tT, typename T1>
 statslib_inline
-mT 
-dbern(const ArmaGen<mT,tT>& X, const T1 prob_par, const bool log_form = false);
+mT
+dbinom(const ArmaGen<mT,tT>& X, const llint_t n_trials_par, const T1 prob_par, const bool log_form = false);
 #endif
 
 #ifdef STATS_ENABLE_BLAZE_WRAPPERS
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>, bool To = blaze::columnMajor>
 statslib_inline
 BlazeMat<rT,To>
-dbern(const BlazeMat<eT,To>& X, const T1 prob_par, const bool log_form = false);
+dbinom(const BlazeMat<eT,To>& X, const llint_t n_trials_par, const T1 prob_par, const bool log_form = false);
 #endif
 
 #ifdef STATS_ENABLE_EIGEN_WRAPPERS
 template<typename eT, typename T1, typename rT = common_return_t<eT,T1>, int iTr = Eigen::Dynamic, int iTc = Eigen::Dynamic>
 statslib_inline
 EigenMat<rT,iTr,iTc>
-dbern(const EigenMat<eT,iTr,iTc>& X, const T1 prob_par, const bool log_form = false);
+dbinom(const EigenMat<eT,iTr,iTc>& X, const llint_t n_trials_par, const T1 prob_par, const bool log_form = false);
 #endif
 
 //
 // include implementation files
 
-#include "dbern.ipp"
+#include "dbinom.ipp"
 
 #endif
